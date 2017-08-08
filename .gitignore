@@ -1,0 +1,19 @@
+*.retry
+
+### Vim ###
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
+#Mac indexer
+.DS_Store
+
+# tfvars
+terraform.tfvars

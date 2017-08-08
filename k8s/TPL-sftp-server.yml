@@ -1,0 +1,61 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sftp-server
+  labels:
+    name: sftp-server
+  namespace: mw-sftp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: sftp-server
+        version: v1
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/sftp-server: runtime/default
+    spec:
+      volumes:
+      - name: sftp-pv-storage
+        persistentVolumeClaim:
+          claimName: sftp-pv-claim
+      containers:
+      - name: sftp-server
+        image: eu.gcr.io/moss-work/sftp-server:1.6
+        ports:
+        - containerPort: 22
+        env:
+        - name: USERNAME
+          value: laika
+        - name: PASSWORD
+          value: Passw0rd
+        - name: OWNER_ID
+          value: "1000"
+        - name: FOLDER
+          value: /data
+        volumeMounts:
+        - mountPath: /data
+          name: sftp-pv-storage
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sftp-svc
+  namespace: mw-sftp
+  labels:
+    name: sftp-svc
+spec:
+  type: LoadBalancer
+  loadBalancerIP: $STATIC_IP
+  ports:
+  - port: 22
+    targetPort: 22
+    nodePort: 30022
+  selector:
+    name: sftp-server

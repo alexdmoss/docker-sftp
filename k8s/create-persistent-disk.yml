@@ -1,0 +1,26 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: sftp-pv-volume
+  namespace: mw-sftp
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  gcePersistentDisk: 
+    fsType: "ext4" 
+    pdName: "mw-sftp-pd1"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: sftp-pv-claim
+  namespace: mw-sftp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
