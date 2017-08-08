@@ -19,26 +19,26 @@ spec:
         container.apparmor.security.beta.kubernetes.io/sftp-server: runtime/default
     spec:
       volumes:
-      - name: sftp-pv-storage
+      - name: sftp-server-pv-storage
         persistentVolumeClaim:
-          claimName: sftp-pv-claim
+          claimName: sftp-server-pv-claim
       containers:
       - name: sftp-server
-        image: eu.gcr.io/moss-work/sftp-server:1.7.3
+        image: eu.gcr.io/moss-work/sftp-server:${VERSION}
         ports:
         - containerPort: 22
         env:
         - name: USERNAME
           value: laika
         - name: PASSWORD
-          value: ${SECRET}
+          value: Passw0rd
         - name: OWNER_ID
           value: "1000"
         - name: FOLDER
           value: /data
         volumeMounts:
         - mountPath: /data
-          name: sftp-pv-storage
+          name: sftp-server-pv-storage
         securityContext:
           capabilities:
             add: ["SYS_ADMIN"]
@@ -46,10 +46,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sftp-svc
+  name: sftp-server-svc
   namespace: mw-sftp
   labels:
-    name: sftp-svc
+    name: sftp-server-svc
 spec:
   type: LoadBalancer
   loadBalancerIP: 35.190.144.151

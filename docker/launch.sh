@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# [ADM, 2017-08-08] launch.sh
+#
+# Entrypoint script copied to docker container to execute immediately
+# before sshd launches.
+# Sets up required users & keys, and the directory to serve from.
 
 set -e
 
@@ -12,10 +18,10 @@ if [[ "$1" == '/usr/sbin/sshd' ]]; then
 
   # If user doesn't exist on the system
   if ! cut -d: -f1 /etc/passwd | grep -q $USERNAME; then
-    echo "Creating user $USERNAME and granting permissions to $FOLDER"
+    echo "[INFO] Creating user $USERNAME and granting permissions to $FOLDER"
     useradd -u $OWNER_ID -M -d $FOLDER -G sftp -s /bin/false $USERNAME
   else
-    echo "User $USERNAME already exists, granting permissions to $FOLDER"
+    echo "[INFO] User $USERNAME already exists, granting permissions to $FOLDER"
     usermod -u $OWNER_ID -G sftp -a -d $FOLDER -s /bin/false $USERNAME
   fi
 

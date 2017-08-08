@@ -2,10 +2,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sftp-server
+  name: ${IMAGE_NAME}
   labels:
-    name: sftp-server
-  namespace: mw-sftp
+    name: ${IMAGE_NAME}
+  namespace: ${NAMESPACE}
 spec:
   replicas: 1
   strategy:
@@ -13,18 +13,18 @@ spec:
   template:
     metadata:
       labels:
-        name: sftp-server
+        name: ${IMAGE_NAME}
         version: v1
       annotations:
         container.apparmor.security.beta.kubernetes.io/sftp-server: runtime/default
     spec:
       volumes:
-      - name: sftp-pv-storage
+      - name: ${IMAGE_NAME}-pv-storage
         persistentVolumeClaim:
-          claimName: sftp-pv-claim
+          claimName: ${IMAGE_NAME}-pv-claim
       containers:
-      - name: sftp-server
-        image: eu.gcr.io/moss-work/sftp-server:1.6
+      - name: ${IMAGE_NAME}
+        image: ${BUILD_IMAGE}:${VERSION}
         ports:
         - containerPort: 22
         env:
@@ -38,7 +38,7 @@ spec:
           value: /data
         volumeMounts:
         - mountPath: /data
-          name: sftp-pv-storage
+          name: ${IMAGE_NAME}-pv-storage
         securityContext:
           capabilities:
             add: ["SYS_ADMIN"]
@@ -46,16 +46,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sftp-svc
-  namespace: mw-sftp
+  name: ${IMAGE_NAME}-svc
+  namespace: ${NAMESPACE}
   labels:
-    name: sftp-svc
+    name: ${IMAGE_NAME}-svc
 spec:
   type: LoadBalancer
-  loadBalancerIP: $STATIC_IP
+  loadBalancerIP: ${STATIC_IP}
   ports:
   - port: 22
     targetPort: 22
     nodePort: 30022
   selector:
-    name: sftp-server
+    name: ${IMAGE_NAME}

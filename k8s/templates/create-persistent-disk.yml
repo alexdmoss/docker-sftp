@@ -2,25 +2,25 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: sftp-server-pv-volume
-  namespace: mw-sftp
+  name: ${IMAGE_NAME}-pv-volume
+  namespace: ${NAMESPACE}
 spec:
   capacity:
-    storage: 1Gi
+    storage: ${STORAGE_CAP}Gi
   accessModes:
     - ReadWriteOnce
   gcePersistentDisk:
     fsType: "ext4"
-    pdName: "mw-sftp-pd1"
+    pdName: "${NAMESPACE}-pd1"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: sftp-server-pv-claim
-  namespace: mw-sftp
+  name: ${IMAGE_NAME}-pv-claim
+  namespace: ${NAMESPACE}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: ${STORAGE_CAP}Gi

@@ -1,7 +1,4 @@
 *.retry
-public-keys/*
-private-keys/*
-ssh/*
 secrets/*
 
 ### Vim ###
@@ -10,14 +7,9 @@ secrets/*
 [._]s[a-w][a-z]
 # session
 Session.vim
-# temporary
-.netrwhist
 *~
 # auto-generated tag files
 tags
 
 #Mac indexer
 .DS_Store
-
-# tfvars
-terraform.tfvars
