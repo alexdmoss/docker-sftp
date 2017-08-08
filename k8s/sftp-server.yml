@@ -31,7 +31,7 @@ spec:
         - name: USERNAME
           value: laika
         - name: PASSWORD
-          value: Passw0rd
+          value: ${SECRET}
         - name: OWNER_ID
           value: "1000"
         - name: FOLDER

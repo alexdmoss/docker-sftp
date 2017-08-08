@@ -1,4 +1,8 @@
 *.retry
+public-keys/*
+private-keys/*
+ssh/*
+secrets/*
 
 ### Vim ###
 # swap

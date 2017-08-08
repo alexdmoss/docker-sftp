@@ -12,7 +12,7 @@ services:
     image: eu.gcr.io/moss-work/sftp-server:1.2
     environment:
       - USERNAME=laika
-      - PASSWORD=password
+      - PASSWORD=${SECRET}
       - OWNER_ID=1000
       # must match volumes in app above
       - FOLDER=/data
