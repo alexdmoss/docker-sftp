@@ -29,9 +29,15 @@ spec:
         - containerPort: 22
         env:
         - name: USERNAME
-          value: laika
+          valueFrom:
+            secretKeyRef:
+              name: sftp-server-sec
+              key: username
         - name: PASSWORD
-          value: Passw0rd
+          valueFrom:
+            secretKeyRef:
+              name: sftp-server-sec
+              key: password
         - name: OWNER_ID
           value: "1000"
         - name: FOLDER

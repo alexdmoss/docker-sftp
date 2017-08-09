@@ -22,11 +22,14 @@ if [[ -z ${VERSION} ]];           then echo "[ERROR] VERSION not set, aborting."
 if [[ -z ${NAMESPACE} ]];         then echo "[ERROR] NAMESPACE not set, aborting.";         exit 1; fi
 if [[ -z ${STORAGE_CAP} ]];       then echo "[ERROR] STORAGE_CAP not set, aborting.";       exit 1; fi
 
-
 BUILD_IMAGE=eu.gcr.io/${GCP_PROJECT_NAME}/${IMAGE_NAME}
 
 # installing for first time - run one-time setup activities
 if [[ $1 == "--install" ]]; then
+
+  # set up secrets/ dirs
+  mkdir -p ${SFTP_BUILD_DIR}/secrets/public-keys/
+  mkdir -p ${SFTP_BUILD_DIR}/secrets/ssh/
 
   # defines kubernetes namespace from template
   cat ${SFTP_BUILD_DIR}/k8s/templates/create-namespace.yml \
@@ -66,10 +69,15 @@ cat ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}.yml \
 | sed 's#${VERSION}#'${LATEST_TAG}'#g' \
 > ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}-staging.yml
 
+echo "Creating required secrets ..."
+${SFTP_BUILD_DIR}/gcp/create-user-secrets.sh
+
 echo "Updating Kubernetes deployment ..."
 kubectl apply -f ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}-staging.yml
 
 echo "Deployment complete. Housekeeping in progress ..."
 rm ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}-staging.yml
+
+echo "Script complete."
 
 exit 0
