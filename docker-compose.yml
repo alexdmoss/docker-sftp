@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  app:
+    image: alpine:3.6
+    # Simulate an application server with an endless loop.
+    command: sh -c 'while true; do sleep 10; done';
+    volumes:
+      - ./data:/data
+  sshd:
+    build: .
+    image: eu.gcr.io/moss-work/sftp-server:1.7.5
+    environment:
+      - USERNAME=laika
+      - PASSWORD=${PASSWORD}
+      - OWNER_ID=1000
+      # must match volumes in app above
+      - FOLDER=/data
+      - CHROOT=0
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - "22:22"
+    expose:
+      - "22"
+    volumes_from:
+      - app
