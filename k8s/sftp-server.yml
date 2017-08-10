@@ -58,7 +58,7 @@ metadata:
     name: sftp-server-svc
 spec:
   type: LoadBalancer
-  loadBalancerIP: 35.190.144.151
+  loadBalancerIP: 35.196.7.42
   ports:
   - port: 22
     targetPort: 22

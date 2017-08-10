@@ -35,7 +35,7 @@ fi
 
 # build docker image locally
 echo; echo "[INFO] Building docker image ${BUILD_IMAGE} ..."
-docker build -t ${BUILD_IMAGE} -f ${SFTP_BUILD_DIR}/docker/Dockerfile .
+docker build -t ${BUILD_IMAGE} -f ${SFTP_BUILD_DIR}/Dockerfile .
 
 # push to GCR - assumes command line already authenticated
 echo; echo "[INFO] Pushing built image to Google Container Registry ..."

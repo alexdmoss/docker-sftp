@@ -1,5 +1,6 @@
 *.retry
 secrets/*
+data/*
 
 ### Vim ###
 # swap

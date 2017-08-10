@@ -70,7 +70,7 @@ cat ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}.yml \
 > ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}-staging.yml
 
 echo "Creating required secrets ..."
-${SFTP_BUILD_DIR}/gcp/create-user-secrets.sh
+${SFTP_BUILD_DIR}/gcp/create-user-secret.sh
 
 echo "Updating Kubernetes deployment ..."
 kubectl apply -f ${SFTP_BUILD_DIR}/k8s/${IMAGE_NAME}-staging.yml
